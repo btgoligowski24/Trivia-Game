@@ -22,11 +22,30 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="text-center">
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
+    <div id="main" class="container my-4 p-0 rounded">
+        <div class="row-fluid">
+            <div class="col-10 offset-1">
+                <h1 class="jumbotron py-5">
+                How Well Do You Know Your <span class="friends">F<span class="red mx-2">&bull;</span>R<span class="blue mx-2">&bull;</span>I<span class="gold mx-2">&bull;</span>E<span class="red mx-2">&bull;</span>N<span class="gold mx-2">&bull;</span>D<span class="blue mx-2">&bull;</span>S</span><span class="ml-1">?</span>
+                </h1>
+                <div id="questions">
+                    <p>Time Remaining: <span id="time"></span></p>
+                    <p id="question"></p>
+                </div>
+                <div id="stats">
+                    <p>You've completed the quiz. Below are your stats.</p>
+                    <p>Correct Answers: <span id="right"></span></p>
+                    <p>Wrong Answers: <span id="wrong"></span></p>
+                    <p>Unanswered Questions: <span id="skipped"></span></p>
+                </div>
+                <button type="button" id="start" class="btn btn-lg btn-success px-5 my-auto friends">Start</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

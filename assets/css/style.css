@@ -1,0 +1,40 @@
+@import url("../css/fonts/friends/stylesheet.css");
+
+html, body {
+    height: 97%;
+}
+
+body {
+    background-image: url("../images/friendsgroup.jpg");
+    background-size: cover;
+}
+
+#stats, #questions {
+    display: none;
+}
+
+#main {
+    background-color: rgba(255, 255, 255, .8);
+    min-height: 100%;
+}
+
+.friends {
+    font-family: 'gabriel_weiss_friends_fontRg';
+}
+
+.jumbotron {
+    background-color: unset;
+    font-weight: bold;
+}
+
+.red {
+    color: red;
+}
+
+.gold {
+    color: gold;
+}
+
+.blue {
+    color: skyblue;
+}
