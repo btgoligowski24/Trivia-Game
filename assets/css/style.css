@@ -9,7 +9,7 @@ body {
     background-size: cover;
 }
 
-#stats, #questions {
+#stats, #game {
     display: none;
 }
 
