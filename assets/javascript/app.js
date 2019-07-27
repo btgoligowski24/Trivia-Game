@@ -9,15 +9,15 @@ var triviaGame = {
             7: "What is the name of Joey's stuffed penguin?",
             8: "What is Chandler's middle name?",
             9: "What did Joey name his barcalounger?",
-            10: "What was Chandler's job in the early seasons of the show?"
+            10: "What was Chandler's job in the early seasons of the show?",
             11: "Who pees on Monica's leg when she gets stung by a jellyfish?",
             12: "What caused the fire in Phoebe and Rachel's apartment?",
-            13: "Who lives in the apartment below Monica's?"
-            14: "What color is the couch in Central Perk?"
+            13: "Who lives in the apartment below Monica's?",
+            14: "What color is the couch in Central Perk?",
             15: "Who sang the Friends theme?",
             16: "How many types of towels does Monica have?",
             17: "What is Danny Devito's stripper name?",
-            18: "What does Paul (Bruce Willis) call himself to build his confidence?"
+            18: "What does Paul (Bruce Willis) call himself to build his confidence?",
             19: "Which famous person does Phoebe believe is her grandfather?",
             20: "Where does David (Phoebe's boyfriend) move to?"
         },
@@ -50,8 +50,8 @@ var triviaGame = {
             4: ["72", "100", "50", "24"],
             5: ["6", "12", "2", "8"],
             6: ["15", "18", "20", "12"],
-            7: ["Snuggles", "Hugsy", "Mr. Penguin", "None"],
-            8: ["Marcel", "Michelle", "Milicent", "Muriel"],
+            7: ["Snuggles", "Hugsy", "Mr. Penguin", "Arty"],
+            8: ["Marcel", "Michelle", "Millicent", "Muriel"],
             9: ["Rosita", "Rosa", "Rosie", "Rosalind"],
             10: ["IT Procurement Manager", "Data Analyst", "Transpondster", "Financial Analyst"],
             11: ["Monica", "Joey", "Chandler", "Richard"],
@@ -60,7 +60,7 @@ var triviaGame = {
             14: ["Green", "Orange", "Yellow", "Red"],
             15: ["Fool's Garden", "Smash Mouth", "Sunrise Avenue", "The Rembrandts"],
             16: ["9", "10", "11", "12"],
-            17: ["Officer Goodbody", "Officer Sexy", "Officer Hunky", "Officer Lovely"]
+            17: ["Officer Goodbody", "Officer Sexy", "Officer Hunky", "Officer Sultry"],
             18: ["A neat guy", "A cool guy", "A special guy", "A good guy"],
             19: ["Thomas Edison", "Albert Einstein", "Nikola Tesla", "JP Morgan"],
             20: ["Yemen", "Minsk", "Bulgaria", "Mongolia"]
