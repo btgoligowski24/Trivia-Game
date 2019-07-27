@@ -1,6 +1,7 @@
 @import url("../css/fonts/friends/stylesheet.css");
 
-html, body {
+html,
+body {
     height: 97%;
 }
 
@@ -9,7 +10,8 @@ body {
     background-size: cover;
 }
 
-#stats, #game {
+#stats,
+#game {
     display: none;
 }
 
@@ -37,4 +39,23 @@ body {
 
 .blue {
     color: skyblue;
+}
+
+.hurry {
+    font-weight: bold;
+    color: red;
+    animation: blink-animation 1s steps(5, start) infinite;
+    -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
 }

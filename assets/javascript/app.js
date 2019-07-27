@@ -19,7 +19,7 @@ var triviaGame = {
             17: "What is Danny Devito's stripper name?",
             18: "What does Paul (Bruce Willis) call himself to build his confidence?"
             19: "Which famous person does Phoebe believe is her grandfather?",
-            20: "Where does David the scientist (Phoebe's boyfriend) move to?"
+            20: "Where does David (Phoebe's boyfriend) move to?"
         },
         answers: {
             1: "The One with the Embyros",
