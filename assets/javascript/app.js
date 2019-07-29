@@ -21,7 +21,12 @@ $(document).ready(function () {
             17: "What is Danny Devito's stripper name?",
             18: "What does Paul (Bruce Willis) call himself to build his confidence?",
             19: "Which famous person does Phoebe believe is her grandfather?",
-            20: "Where does David, Phoebe's boyfriend, move to?"
+            20: "Where does David, Phoebe's boyfriend, move to?",
+            21: "How many pages, front and back, is the letter Rachel writes to Ross before they get back together for the second time?",
+            22: "Who says \"I gave you my Snack Pack\"?",
+            23: "What city is Chandler forced to move to when he falls asleep in a meeting?",
+            24: "What is the name of the Barista at Central Perk who is in love with Rachel?",
+            25: "What is the color of the sweater that indicates the father of Rachel's baby?"
         },
         answers: {
             1: "The One with the Embyros",
@@ -43,7 +48,12 @@ $(document).ready(function () {
             17: "Officer Goodbody",
             18: "A neat guy",
             19: "Albert Einstein",
-            20: "Minsk"
+            20: "Minsk",
+            21: "18",
+            22: "Rhonda",
+            23: "Tulsa",
+            24: "Gunther",
+            25: "Red"
         },
         choices: {
             1: ["The One with the Contest", "The One with Ross's Thing", "The One Where They Switch Apartments", "The One with the Embyros"],
@@ -65,11 +75,49 @@ $(document).ready(function () {
             17: ["Officer Goodbody", "Officer Sexy", "Officer Hunky", "Officer Sultry"],
             18: ["A neat guy", "A cool guy", "A special guy", "A good guy"],
             19: ["Thomas Edison", "Albert Einstein", "Nikola Tesla", "JP Morgan"],
-            20: ["Yemen", "Minsk", "Bulgaria", "Mongolia"]
+            20: ["Yemen", "Minsk", "Bulgaria", "Mongolia"],
+            21: ["15", "18", "12", "9"],
+            22: ["Rhonda", "Brenda", "Donna", "Alisha"],
+            23: ["Tulsa", "Omaha", "St. Louis", "Wichita"],
+            24: ["Trevor", "Tyler", "Gunther", "Gunner"],
+            25: ["Green", "Blue", "Brown", "Red"]
         },
         right: 0,
         wrong: 0,
         skipped: 0,
+        timerRunning: false,
+        timeLimit: 14,
+        timer: function () {
+            if (triviaGame.timeLimit === 0) {
+                $("#time").removeClass("hurry").addClass("timeUp");
+                $("#time").text("Time's up!");
+                triviaGame.stopTimer();
+            } else {
+                if (triviaGame.timeLimit > 1) {
+                    $("#time").text(triviaGame.timeLimit + " seconds");
+                } else {
+                    $("#time").text(triviaGame.timeLimit + " second");
+                }
+                if (triviaGame.timeLimit > 6 && $("#time").hasClass("hurry")) {
+                    $("#time").removeClass("hurry")
+                } else if (triviaGame.timeLimit === 5 && !$("#time").hasClass("hurry")) {
+                    $("#time").addClass("hurry")
+                }
+                triviaGame.timeLimit--;
+            }
+        },
+        startTimer: function () {
+            if (!triviaGame.timerRunning) {
+                triviaGame.timeLimit = 14;
+                $("#time").text("15 seconds");
+                setInterval(triviaGame.timer, 1000);
+                triviaGame.timerRunning = true;
+            }
+        },
+        stopTimer: function () {
+            clearInterval(triviaGame.timer);
+            triviaGame.timerRunning = false;
+        },
         get questionCount() {
             return Object.keys(this.questions).length;
         },
@@ -115,27 +163,39 @@ $(document).ready(function () {
             }
         },
         displayQuestion: function () {
-            // run timer function
-            var newChoices = triviaGame.choices[triviaGame.counter];
-            triviaGame.shuffle(newChoices);
-            var index = triviaGame.counter;
+            if (triviaGame.counter === triviaGame.questionCount + 1) {
+                $("#right").text(triviaGame.right + "/" + triviaGame.questionCount);
+                $("#wrong").text(triviaGame.wrong + "/" + triviaGame.questionCount);
+                $("#skipped").text(triviaGame.skipped + "/" + triviaGame.questionCount);
+                $("#stats").css("display", "block");
+                $("#game").css("display", "none");
+                $("#start").css("display", "inline-block");
+                $("#start").text("Play Again");
+                triviaGame.right = 0;
+                triviaGame.wrong = 0;
+                triviaGame.skipped = 0;
+                triviaGame.counter = 1;
+            } else {
+                var newChoices = triviaGame.choices[triviaGame.counter];
+                triviaGame.shuffle(newChoices);
 
-            if ($("#start").css("display") === "inline-block" && triviaGame.counter === 1) {
-                $("#start").css("display", "none");
-                $("#game").css("display", "block");
-            }
-            if (triviaGame.counter < triviaGame.questionCount) {
-                $("#answers").empty();
-                $("#question").text(triviaGame.questions[triviaGame.counter]);
-                triviaGame.counter++;
-                $(newChoices).each(function (i, val) {
-                    var newP = $("<p>");
-                    $(newP).text(val);
-                    $("#answers").append(newP);
-                })
+                if ($("#start").css("display") === "inline-block" && triviaGame.counter === 1) {
+                    $("#start").css("display", "none");
+                    $("#game").css("display", "block");
+                }
+                if (triviaGame.counter < triviaGame.questionCount + 1) {
+                    triviaGame.startTimer();
+                    $("#answers").empty();
+                    $("#question").text(triviaGame.questions[triviaGame.counter]);
+                    triviaGame.counter++;
+                    $(newChoices).each(function (index, value) {
+                        var newP = $("<p>");
+                        $(newP).text(value);
+                        $("#answers").append(newP);
+                    })
+                }
             }
         },
-
     }
 
     $("#start").on("click", triviaGame.displayQuestion);

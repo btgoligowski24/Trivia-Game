@@ -48,6 +48,11 @@ body {
     -webkit-animation: blink-animation 1s steps(5, start) infinite;
 }
 
+.timeUp {
+    font-weight: bold;
+    color: red;
+}
+
 @keyframes blink-animation {
     to {
         visibility: hidden;
