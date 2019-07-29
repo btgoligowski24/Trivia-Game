@@ -41,6 +41,16 @@ body {
     color: skyblue;
 }
 
+.choice {
+    max-width: 50%;
+    margin: 0 auto .25em auto;
+}
+
+.choice:hover {
+    background-color: black;
+    color: white;
+}
+
 .hurry {
     font-weight: bold;
     color: red;

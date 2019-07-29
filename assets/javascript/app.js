@@ -22,11 +22,11 @@ $(document).ready(function () {
             18: "What does Paul (Bruce Willis) call himself to build his confidence?",
             19: "Which famous person does Phoebe believe is her grandfather?",
             20: "Where does David, Phoebe's boyfriend, move to?",
-            21: "How many pages, front and back, is the letter Rachel writes to Ross before they get back together for the second time?",
+            21: "How many pages is the letter Rachel writes to Ross at the beach?",
             22: "Who says \"I gave you my Snack Pack\"?",
             23: "What city is Chandler forced to move to when he falls asleep in a meeting?",
             24: "What is the name of the Barista at Central Perk who is in love with Rachel?",
-            25: "What is the color of the sweater that indicates the father of Rachel's baby?"
+            25: "What is the color of the sweater that indicates who the father of Rachel's baby is?"
         },
         answers: {
             1: "The One with the Embyros",
@@ -82,17 +82,34 @@ $(document).ready(function () {
             24: ["Trevor", "Tyler", "Gunther", "Gunner"],
             25: ["Green", "Blue", "Brown", "Red"]
         },
+        get questionCount() {
+            return Object.keys(this.questions).length;
+        },
+        get shuffledQuestions() {
+            delete this.shuffledQuestions;
+            return this.shuffledQuestions = Object.values(this.questions);
+        },
+        get shuffledChoices() {
+            delete this.shuffledChoices;
+            return this.shuffledChoices = Object.values(this.choices);
+        },
+        get shuffledAnswers() {
+            delete this.shuffledAnswers;
+            return this.shuffledAnswers = Object.values(this.answers);
+        },
         right: 0,
         wrong: 0,
         skipped: 0,
         counter: 0,
         timerRunning: false,
-        timeLimit: 14,
+        timeLimit: 0,
+        intervalId: null,
         timer: function () {
             if (triviaGame.timeLimit === 0) {
                 $("#time").removeClass("hurry").addClass("timeUp");
                 $("#time").text("Time's up!");
                 triviaGame.stopTimer();
+                setTimeout(triviaGame.displayQuestion, 3000);
             } else {
                 if (triviaGame.timeLimit > 1) {
                     $("#time").text(triviaGame.timeLimit + " seconds");
@@ -100,27 +117,29 @@ $(document).ready(function () {
                     $("#time").text(triviaGame.timeLimit + " second");
                 }
                 if (triviaGame.timeLimit > 6 && $("#time").hasClass("hurry")) {
-                    $("#time").removeClass("hurry")
+                    $("#time").removeClass("hurry");
                 } else if (triviaGame.timeLimit === 5 && !$("#time").hasClass("hurry")) {
-                    $("#time").addClass("hurry")
+                    $("#time").addClass("hurry");
                 }
                 triviaGame.timeLimit--;
             }
         },
         startTimer: function () {
             if (!triviaGame.timerRunning) {
+                if ($("#time").hasClass("timeUp")) {
+                    $("#time").removeClass("timeUp");
+                }
                 triviaGame.timeLimit = 14;
                 $("#time").text("15 seconds");
-                setInterval(triviaGame.timer, 1000);
+                triviaGame.intervalId = setInterval(triviaGame.timer, 1000);
                 triviaGame.timerRunning = true;
+                triviaGame.test++;
             }
         },
         stopTimer: function () {
-            clearInterval(triviaGame.timer);
+            clearInterval(triviaGame.intervalId);
             triviaGame.timerRunning = false;
-        },
-        get questionCount() {
-            return Object.keys(this.questions).length;
+            triviaGame.test = 0;
         },
         shuffle: function (obj1, obj2, obj3) {
             var index = obj1.length;
@@ -177,27 +196,25 @@ $(document).ready(function () {
                 triviaGame.counter = 0;
             } else {
                 if ($("#start").css("display") === "inline-block" && triviaGame.counter === 0) {
-                    var shuffledQuestions = Object.values(triviaGame.questions);
-                    var shuffledChoices = Object.values(triviaGame.choices);
-                    var shuffledAnswers = Object.values(triviaGame.answers);
-                    triviaGame.shuffle(shuffledQuestions, shuffledAnswers, shuffledChoices);
+                    triviaGame.shuffle(triviaGame.shuffledQuestions, triviaGame.shuffledAnswers, triviaGame.shuffledChoices);
                     $("#start").css("display", "none");
                     $("#stats").css("display", "none");
                     $("#game").css("display", "block");
                 }
 
                 if (triviaGame.counter < triviaGame.questionCount) {
-                    let newChoices = shuffledChoices[triviaGame.counter];
+                    let newChoices = triviaGame.shuffledChoices[triviaGame.counter];
                     triviaGame.shuffle(newChoices);
-                    triviaGame.startTimer();
                     $("#answers").empty();
-                    $("#question").text(shuffledQuestions[triviaGame.counter]);
-                    triviaGame.counter++;
+                    $("#question").text(triviaGame.shuffledQuestions[triviaGame.counter]);
                     $(newChoices).each(function (index, value) {
-                        var newP = $("<p>");
-                        $(newP).text(value);
-                        $("#answers").append(newP);
-                    })
+                        var newSelection = $("<h2>");
+                        $(newSelection).addClass("choice rounded");
+                        $(newSelection).text(value);
+                        $("#answers").append(newSelection);
+                    });
+                    triviaGame.startTimer();
+                    triviaGame.counter++;
                 }
             }
         },
