@@ -75,7 +75,7 @@ $(document).ready(function () {
             17: ["Officer Goodbody", "Officer Sexy", "Officer Hunky", "Officer Sultry"],
             18: ["A neat guy", "A cool guy", "A special guy", "A good guy"],
             19: ["Thomas Edison", "Albert Einstein", "Nikola Tesla", "JP Morgan"],
-            20: ["Yemen", "Minsk", "Bulgaria", "Mongolia"],
+            20: ["Mumbai", "Minsk", "Moscow", "Manila"],
             21: ["15", "18", "12", "9"],
             22: ["Rhonda", "Brenda", "Donna", "Alisha"],
             23: ["Tulsa", "Omaha", "St. Louis", "Wichita"],
@@ -85,6 +85,7 @@ $(document).ready(function () {
         right: 0,
         wrong: 0,
         skipped: 0,
+        counter: 0,
         timerRunning: false,
         timeLimit: 14,
         timer: function () {
@@ -121,7 +122,6 @@ $(document).ready(function () {
         get questionCount() {
             return Object.keys(this.questions).length;
         },
-        counter: 1,
         shuffle: function (obj1, obj2, obj3) {
             var index = obj1.length;
             var random, temp1, temp2, temp3;
@@ -163,7 +163,7 @@ $(document).ready(function () {
             }
         },
         displayQuestion: function () {
-            if (triviaGame.counter === triviaGame.questionCount + 1) {
+            if (triviaGame.counter === triviaGame.questionCount) {
                 $("#right").text(triviaGame.right + "/" + triviaGame.questionCount);
                 $("#wrong").text(triviaGame.wrong + "/" + triviaGame.questionCount);
                 $("#skipped").text(triviaGame.skipped + "/" + triviaGame.questionCount);
@@ -174,19 +174,24 @@ $(document).ready(function () {
                 triviaGame.right = 0;
                 triviaGame.wrong = 0;
                 triviaGame.skipped = 0;
-                triviaGame.counter = 1;
+                triviaGame.counter = 0;
             } else {
-                var newChoices = triviaGame.choices[triviaGame.counter];
-                triviaGame.shuffle(newChoices);
-
-                if ($("#start").css("display") === "inline-block" && triviaGame.counter === 1) {
+                if ($("#start").css("display") === "inline-block" && triviaGame.counter === 0) {
+                    var shuffledQuestions = Object.values(triviaGame.questions);
+                    var shuffledChoices = Object.values(triviaGame.choices);
+                    var shuffledAnswers = Object.values(triviaGame.answers);
+                    triviaGame.shuffle(shuffledQuestions, shuffledAnswers, shuffledChoices);
                     $("#start").css("display", "none");
+                    $("#stats").css("display", "none");
                     $("#game").css("display", "block");
                 }
-                if (triviaGame.counter < triviaGame.questionCount + 1) {
+
+                if (triviaGame.counter < triviaGame.questionCount) {
+                    let newChoices = shuffledChoices[triviaGame.counter];
+                    triviaGame.shuffle(newChoices);
                     triviaGame.startTimer();
                     $("#answers").empty();
-                    $("#question").text(triviaGame.questions[triviaGame.counter]);
+                    $("#question").text(shuffledQuestions[triviaGame.counter]);
                     triviaGame.counter++;
                     $(newChoices).each(function (index, value) {
                         var newP = $("<p>");
