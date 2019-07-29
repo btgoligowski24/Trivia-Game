@@ -41,6 +41,10 @@ body {
     color: skyblue;
 }
 
+.green {
+    color: green;
+}
+
 .choice {
     max-width: 50%;
     margin: 0 auto .25em auto;

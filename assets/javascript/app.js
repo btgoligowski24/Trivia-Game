@@ -22,7 +22,7 @@ $(document).ready(function () {
             18: "What does Paul (Bruce Willis) call himself to build his confidence?",
             19: "Which famous person does Phoebe believe is her grandfather?",
             20: "Where does David, Phoebe's boyfriend, move to?",
-            21: "How many pages is the letter Rachel writes to Ross at the beach?",
+            21: "In \"The One at the Beach\", how many pages is the letter Rachel writes Ross?",
             22: "Who says \"I gave you my Snack Pack\"?",
             23: "What city is Chandler forced to move to when he falls asleep in a meeting?",
             24: "What is the name of the Barista at Central Perk who is in love with Rachel?",
@@ -49,7 +49,7 @@ $(document).ready(function () {
             18: "A neat guy",
             19: "Albert Einstein",
             20: "Minsk",
-            21: "18",
+            21: "18, front and back",
             22: "Rhonda",
             23: "Tulsa",
             24: "Gunther",
@@ -76,14 +76,15 @@ $(document).ready(function () {
             18: ["A neat guy", "A cool guy", "A special guy", "A good guy"],
             19: ["Thomas Edison", "Albert Einstein", "Nikola Tesla", "JP Morgan"],
             20: ["Mumbai", "Minsk", "Moscow", "Manila"],
-            21: ["15", "18", "12", "9"],
+            21: ["15, front and back", "18, front and back", "12, front and back", "9, front and back"],
             22: ["Rhonda", "Brenda", "Donna", "Alisha"],
             23: ["Tulsa", "Omaha", "St. Louis", "Wichita"],
             24: ["Trevor", "Tyler", "Gunther", "Gunner"],
             25: ["Green", "Blue", "Brown", "Red"]
         },
         get questionCount() {
-            return Object.keys(this.questions).length;
+            delete this.questionCount;
+            return this.questionCount = Object.keys(this.questions).length;
         },
         get shuffledQuestions() {
             delete this.shuffledQuestions;
@@ -103,13 +104,12 @@ $(document).ready(function () {
         counter: 0,
         timerRunning: false,
         timeLimit: 0,
+        clicked: false,
         intervalId: null,
         timer: function () {
             if (triviaGame.timeLimit === 0) {
                 $("#time").removeClass("hurry").addClass("timeUp");
-                $("#time").text("Time's up!");
-                triviaGame.stopTimer();
-                setTimeout(triviaGame.displayQuestion, 3000);
+                triviaGame.showAnswer();
             } else {
                 if (triviaGame.timeLimit > 1) {
                     $("#time").text(triviaGame.timeLimit + " seconds");
@@ -182,6 +182,7 @@ $(document).ready(function () {
             }
         },
         displayQuestion: function () {
+            var clickCheck = triviaGame.clicked;
             if (triviaGame.counter === triviaGame.questionCount) {
                 $("#right").text(triviaGame.right + "/" + triviaGame.questionCount);
                 $("#wrong").text(triviaGame.wrong + "/" + triviaGame.questionCount);
@@ -209,8 +210,10 @@ $(document).ready(function () {
                     $("#question").text(triviaGame.shuffledQuestions[triviaGame.counter]);
                     $(newChoices).each(function (index, value) {
                         var newSelection = $("<h2>");
-                        $(newSelection).addClass("choice rounded");
+                        $(newSelection).addClass("choice rounded py-1");
+                        $(newSelection).attr("data-answer", value);
                         $(newSelection).text(value);
+                        $(newSelection).on("click", {clickCheck: true},triviaGame.showAnswer);
                         $("#answers").append(newSelection);
                     });
                     triviaGame.startTimer();
@@ -218,6 +221,41 @@ $(document).ready(function () {
                 }
             }
         },
+        showAnswer: function (clickCheck) {
+            var newH2 = $("<h2 class=\"mb-3\">");
+            var newH3 = $("<h3>");
+            var answersElem = $("#answers");
+           if (triviaGame.shuffledAnswers[triviaGame.counter - 1] === $(this).attr("data-answer")) {
+               triviaGame.stopTimer();
+               $(answersElem).empty();
+               $(newH2).attr("class", "green");
+               $(newH2).text("You couldn't BE any more correct!");
+               $(answersElem).append(newH2);
+               triviaGame.right++;
+               setTimeout(triviaGame.displayQuestion, 3000);
+           } else if (clickCheck) {
+            triviaGame.stopTimer();
+            $(answersElem).empty();
+            $(newH2).text("Oops, it looks like you needed to PIVOT your answer!");
+            $(newH3).attr("class","friends red");
+            $(newH3).text("The correct answer was: " + triviaGame.shuffledAnswers[triviaGame.counter - 1]);
+            $(answersElem).append(newH2);
+            $(answersElem).append(newH3);
+            triviaGame.wrong++;
+            setTimeout(triviaGame.displayQuestion, 5000);
+           } else {
+            $("#time").text("Time's up!");
+            triviaGame.stopTimer();
+            $(answersElem).empty();
+            $(newH2).text("I realize it's probably a moo point now, but:");
+            $(newH3).attr("class","friends red");
+            $(newH3).text("The correct answer was: " + triviaGame.shuffledAnswers[triviaGame.counter - 1]);
+            $(answersElem).append(newH2);
+            $(answersElem).append(newH3);
+            triviaGame.skipped++;
+            setTimeout(triviaGame.displayQuestion, 5000);
+           }   
+        }
     }
 
     $("#start").on("click", triviaGame.displayQuestion);
