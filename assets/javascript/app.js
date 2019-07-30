@@ -262,7 +262,9 @@ $(document).ready(function () {
                 $(videoElem).append(sourceElem);
                 $(embedElem).append(videoElem);
                 $(statsElem).prepend(embedElem);
-                triviaGame.increaseEmbedElemWidth();
+                if ($(embedElem).css("max-width") === "50%") {
+                    $(embedElem).css("max-width", "90%");
+                }
                 triviaGame.right = 0;
                 triviaGame.wrong = 0;
                 triviaGame.skipped = 0;
@@ -275,6 +277,7 @@ $(document).ready(function () {
                     $("#start").css("display", "none");
                     $(statsElem).css("display", "none");
                     $("#game").css("display", "block");
+                    $("#stats #embed").remove();
                 }
                 if ($("#questions").css("display") === "none") {
                     $("#questions").css("display", "block");
