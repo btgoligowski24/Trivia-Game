@@ -265,6 +265,7 @@ $(document).ready(function () {
                 $(videoElem).append(sourceElem);
                 $(embedElem).append(videoElem);
                 $(statsElem).prepend(embedElem);
+                triviaGame.increaseEmbedElemWidth();
                 triviaGame.right = 0;
                 triviaGame.wrong = 0;
                 triviaGame.skipped = 0;
@@ -280,9 +281,6 @@ $(document).ready(function () {
                 }
                 if ($("#questions").css("display") === "none") {
                     $("#questions").css("display", "block");
-                }
-                if ($("#embed").css("max-width") === "80%") {
-                    $("#embed").css("max-width", "50%");
                 }
                 triviaGame.newQuestion();
             }
@@ -323,9 +321,6 @@ $(document).ready(function () {
                 var videoElem = $("<video class=\"embed-responsive-item\" autoplay controls>");
                 var sourceElem = $("<source type=\"video/mp4\">");
                 var newH2 = $("<h2 class=\"mb-3\">");
-                if ($(embedElem).css("max-width") === "50%") {
-                    $(embedElem).css("max-width", "80%");
-                }
                 $(newH2).text("The Lightning Round");
                 $(newH2).attr("class", "lightningRound friends rounded mx-auto mb-3 py-2");
                 $(answersElem).empty();
@@ -333,6 +328,7 @@ $(document).ready(function () {
                 $(videoElem).append(sourceElem);
                 $(embedElem).append(videoElem);
                 $(answersElem).append(embedElem);
+                triviaGame.increaseEmbedElemWidth();
                 $("#questions").prepend(newH2);
                 $("#questions").css("display", "none");
             }
@@ -393,7 +389,12 @@ $(document).ready(function () {
                 triviaGame.skipped++;
                 triviaGame.lightningRoundFuncCheck();
             }
-        }
+        },
+        increaseEmbedElemWidth: function () {
+            if ($("#embed").css("max-width") === "50%") {
+                $("#embed").css("max-width", "80%");
+            }
+        },
     }
 
     $("#start").on("click", triviaGame.displayQuestion);
