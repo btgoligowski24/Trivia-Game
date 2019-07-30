@@ -20,6 +20,11 @@ body {
     min-height: 100%;
 }
 
+#embed {
+    max-width: 50%;
+    margin: 0 auto;
+}
+
 .friends {
     font-family: 'gabriel_weiss_friends_fontRg';
 }
@@ -55,6 +60,15 @@ body {
     color: white;
 }
 
+.lightningRound {
+    font-weight: bold;
+    color: gold;
+    background-color: black;
+    max-width: 50%;
+    animation: blink-animation 1s steps(5, start) infinite;
+    -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+
 .hurry {
     font-weight: bold;
     color: red;
@@ -76,5 +90,15 @@ body {
 @-webkit-keyframes blink-animation {
     to {
         visibility: hidden;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    #embed {
+        max-width: 90%;
+    }
+
+    .lightningRound {
+        max-width: 80%;
     }
 }

@@ -6,7 +6,7 @@ $(document).ready(function () {
             2: "How many times has Ross been divorced?",
             3: "What doesn't Joey share?",
             4: "How many long-stemmed roses did Ross send to Emily?",
-            5: "How many lasagnas did Monica make for her aunt?",
+            5: "Condoms are only how effective?",
             6: "What is Monica's apartment number?",
             7: "What is the name of Joey's stuffed penguin?",
             8: "What is Chandler's middle name?",
@@ -33,7 +33,7 @@ $(document).ready(function () {
             2: "3",
             3: "Food",
             4: "72",
-            5: "12",
+            5: "97%",
             6: "20",
             7: "Hugsy",
             8: "Muriel",
@@ -60,12 +60,12 @@ $(document).ready(function () {
             2: ["1", "2", "3", "4"],
             3: ["Women", "Food", "Money", "Advice"],
             4: ["72", "100", "50", "24"],
-            5: ["6", "12", "2", "8"],
+            5: ["96%", "97%", "98%", "95%"],
             6: ["15", "18", "20", "12"],
             7: ["Snuggles", "Hugsy", "Mr. Penguin", "Arty"],
             8: ["Marcel", "Michelle", "Millicent", "Muriel"],
             9: ["Rosita", "Rosa", "Rosie", "Rosalind"],
-            10: ["IT Procurement Manager", "Data Analyst", "Transpondster", "Financial Analyst"],
+            10: ["IT Procurement Manager", "Data Analyst", "Transponster", "Financial Analyst"],
             11: ["Monica", "Joey", "Chandler", "Richard"],
             12: ["Phoebe's candles", "Phoebe's incense", "Rachel's hair dryer", "Rachel's hair straightener"],
             13: ["Mr. Heckles", "Mr. Annoying", "Mr. Creepy", "Mr. Chill"],
@@ -82,6 +82,37 @@ $(document).ready(function () {
             24: ["Trevor", "Tyler", "Gunther", "Gunner"],
             25: ["Green", "Blue", "Brown", "Red"]
         },
+        videos: {
+            1: "",
+            2: "assets/videos/3Divorces.mp4",
+            3: "assets/videos/joeyDoesntShareFood.mp4",
+            4: "",
+            5: "assets/videos/condoms.mp4",
+            6: "assets/videos/apartment20.mp4",
+            7: "assets/videos/hugsy.mp4",
+            8: "",
+            9: "assets/videos/rosita.mp4",
+            10: "assets/videos/transponster.mp4",
+            11: "assets/videos/jellyfish.mp4",
+            12: "",
+            13: "",
+            14: "",
+            15: "",
+            16: "assets/videos/monicasTowels.mp4",
+            17: "assets/videos/officeGoodbody.mp4",
+            18: "assets/videos/neatGuy.mp4",
+            19: "",
+            20: "",
+            21: "assets/videos/18Pages.mp4",
+            22: "assets/videos/rhonda.mp4",
+            23: "",
+            24: "",
+            25: ""
+        },
+        correctAnswerVid: ["assets/videos/thatIsCorrect.mp4", "assets/videos/iKnewIt.mp4"],
+        wrongAnswerVid: ["assets/videos/moreWrong.mp4", "assets/videos/youIdiot.mp4", "assets/videos/pivot.mp4"],
+        skippedQuestionVid: ["assets/videos/dontBlameQuestions.mp4", "assets/videos/fellAsleep.mp4"],
+        lightningRoundVid: "assets/videos/lightningRound.mp4",
         get questionCount() {
             delete this.questionCount;
             return this.questionCount = Object.keys(this.questions).length;
@@ -98,6 +129,10 @@ $(document).ready(function () {
             delete this.shuffledAnswers;
             return this.shuffledAnswers = Object.values(this.answers);
         },
+        get shuffledVideos() {
+            delete this.shuffledVideos;
+            return this.shuffledVideos = Object.values(this.videos);
+        },
         right: 0,
         wrong: 0,
         skipped: 0,
@@ -105,6 +140,7 @@ $(document).ready(function () {
         timerRunning: false,
         timeLimit: 0,
         clicked: false,
+        lightningRound: false,
         intervalId: null,
         timer: function () {
             if (triviaGame.timeLimit === 0) {
@@ -116,7 +152,7 @@ $(document).ready(function () {
                 } else {
                     $("#time").text(triviaGame.timeLimit + " second");
                 }
-                if (triviaGame.timeLimit > 6 && $("#time").hasClass("hurry")) {
+                if (triviaGame.timeLimit >= 6 && $("#time").hasClass("hurry")) {
                     $("#time").removeClass("hurry");
                 } else if (triviaGame.timeLimit === 5 && !$("#time").hasClass("hurry")) {
                     $("#time").addClass("hurry");
@@ -129,11 +165,19 @@ $(document).ready(function () {
                 if ($("#time").hasClass("timeUp")) {
                     $("#time").removeClass("timeUp");
                 }
-                triviaGame.timeLimit = 14;
-                $("#time").text("15 seconds");
-                triviaGame.intervalId = setInterval(triviaGame.timer, 1000);
-                triviaGame.timerRunning = true;
-                triviaGame.test++;
+                if (triviaGame.lightningRound) {
+                    triviaGame.timeLimit = 6;
+                    $("#time").text("7 seconds");
+                    triviaGame.intervalId = setInterval(triviaGame.timer, 1000);
+                    triviaGame.timerRunning = true;
+                    triviaGame.test++;
+                } else {
+                    triviaGame.timeLimit = 14;
+                    $("#time").text("15 seconds");
+                    triviaGame.intervalId = setInterval(triviaGame.timer, 1000);
+                    triviaGame.timerRunning = true;
+                    triviaGame.test++;
+                }
             }
         },
         stopTimer: function () {
@@ -141,10 +185,27 @@ $(document).ready(function () {
             triviaGame.timerRunning = false;
             triviaGame.test = 0;
         },
-        shuffle: function (obj1, obj2, obj3) {
+        shuffle: function (obj1, obj2, obj3, obj4) {
             var index = obj1.length;
-            var random, temp1, temp2, temp3;
-            if (arguments.length === 3) {
+            var random, temp1, temp2, temp3, temp4;
+            if (arguments.length === 4) {
+                while (index) {
+                    random = Math.floor(Math.random() * index);
+                    index -= 1;
+                    temp1 = obj1[index];
+                    temp2 = obj2[index];
+                    temp3 = obj3[index];
+                    temp4 = obj4[index];
+                    obj1[index] = obj1[random];
+                    obj2[index] = obj2[random];
+                    obj3[index] = obj3[random];
+                    obj4[index] = obj4[random];
+                    obj1[random] = temp1;
+                    obj2[random] = temp2;
+                    obj3[random] = temp3;
+                    obj4[random] = temp4;
+                }
+            } else if (arguments.length === 3) {
                 while (index) {
                     random = Math.floor(Math.random() * index);
                     index -= 1;
@@ -178,7 +239,7 @@ $(document).ready(function () {
                     obj1[random] = temp1;
                 }
             } else {
-                throw new Error("illegal argument count, accepts 1, 2, or 3");
+                throw new Error("illegal argument count, accepts 1 to 4");
             }
         },
         displayQuestion: function () {
@@ -195,66 +256,121 @@ $(document).ready(function () {
                 triviaGame.wrong = 0;
                 triviaGame.skipped = 0;
                 triviaGame.counter = 0;
+                triviaGame.lightningRound = false;
+                $(".lightningRound").remove();
             } else {
                 if ($("#start").css("display") === "inline-block" && triviaGame.counter === 0) {
-                    triviaGame.shuffle(triviaGame.shuffledQuestions, triviaGame.shuffledAnswers, triviaGame.shuffledChoices);
+                    triviaGame.shuffle(triviaGame.shuffledQuestions, triviaGame.shuffledAnswers, triviaGame.shuffledChoices, triviaGame.shuffledVideos);
                     $("#start").css("display", "none");
                     $("#stats").css("display", "none");
                     $("#game").css("display", "block");
                 }
 
-                if (triviaGame.counter < triviaGame.questionCount) {
-                    let newChoices = triviaGame.shuffledChoices[triviaGame.counter];
-                    triviaGame.shuffle(newChoices);
-                    $("#answers").empty();
-                    $("#question").text(triviaGame.shuffledQuestions[triviaGame.counter]);
-                    $(newChoices).each(function (index, value) {
-                        var newSelection = $("<h2>");
-                        $(newSelection).addClass("choice rounded py-1");
-                        $(newSelection).attr("data-answer", value);
-                        $(newSelection).text(value);
-                        $(newSelection).on("click", {clickCheck: true},triviaGame.showAnswer);
-                        $("#answers").append(newSelection);
-                    });
-                    triviaGame.startTimer();
-                    triviaGame.counter++;
-                }
+                triviaGame.newQuestion();
+            }
+        },
+        newQuestion: function () {
+            let newChoices = triviaGame.shuffledChoices[triviaGame.counter];
+            triviaGame.shuffle(newChoices);
+            $("#answers").empty();
+            $("#question").text(triviaGame.shuffledQuestions[triviaGame.counter]);
+            $(newChoices).each(function (index, value) {
+                var newSelection = $("<h2>");
+                $(newSelection).addClass("choice rounded py-1");
+                $(newSelection).attr("data-answer", value);
+                $(newSelection).text(value);
+                $(newSelection).on("click", {
+                    clickCheck: true
+                }, triviaGame.showAnswer);
+                $("#answers").append(newSelection);
+            });
+            triviaGame.startTimer();
+            triviaGame.counter++;
+            if (triviaGame.questionCount - triviaGame.counter === 5) {
+                triviaGame.lightningRound = true;
+            }
+        },
+        lightningRoundFuncCheck: function () {
+            if (triviaGame.questionCount - triviaGame.counter === 5) {
+                setTimeout(triviaGame.lightningRoundFunc, 8000);
+                setTimeout(triviaGame.displayQuestion, 20000);
+            } else {
+                setTimeout(triviaGame.displayQuestion, 8000);
+            }
+        },
+        lightningRoundFunc: function () {
+            if (triviaGame.lightningRound && triviaGame.questionCount - triviaGame.counter === 5) {
+                var answersElem = $("#answers");
+                var embedElem = $("<div id=\"embed\" class=\"embed-responsive embed-responsive-16by9 rounded\">");
+                var videoElem = $("<video class=\"embed-responsive-item\" autoplay controls>");
+                var sourceElem = $("<source type=\"video/mp4\">");
+                var newH2 = $("<h2 class=\"mb-3\">");
+                $(newH2).text("The Lightning Round");
+                $(newH2).attr("class", "lightningRound friends rounded mx-auto mb-3 py-2");
+                $(answersElem).empty();
+                $(sourceElem).attr("src", triviaGame.lightningRoundVid);
+                $(videoElem).append(sourceElem);
+                $(embedElem).append(videoElem);
+                $(answersElem).append(embedElem);
+                $("#questions").prepend(newH2);
             }
         },
         showAnswer: function (clickCheck) {
             var newH2 = $("<h2 class=\"mb-3\">");
             var newH3 = $("<h3>");
             var answersElem = $("#answers");
-           if (triviaGame.shuffledAnswers[triviaGame.counter - 1] === $(this).attr("data-answer")) {
-               triviaGame.stopTimer();
-               $(answersElem).empty();
-               $(newH2).attr("class", "green");
-               $(newH2).text("You couldn't BE any more correct!");
-               $(answersElem).append(newH2);
-               triviaGame.right++;
-               setTimeout(triviaGame.displayQuestion, 3000);
-           } else if (clickCheck) {
-            triviaGame.stopTimer();
-            $(answersElem).empty();
-            $(newH2).text("Oops, it looks like you needed to PIVOT your answer!");
-            $(newH3).attr("class","friends red");
-            $(newH3).text("The correct answer was: " + triviaGame.shuffledAnswers[triviaGame.counter - 1]);
-            $(answersElem).append(newH2);
-            $(answersElem).append(newH3);
-            triviaGame.wrong++;
-            setTimeout(triviaGame.displayQuestion, 5000);
-           } else {
-            $("#time").text("Time's up!");
-            triviaGame.stopTimer();
-            $(answersElem).empty();
-            $(newH2).text("I realize it's probably a moo point now, but:");
-            $(newH3).attr("class","friends red");
-            $(newH3).text("The correct answer was: " + triviaGame.shuffledAnswers[triviaGame.counter - 1]);
-            $(answersElem).append(newH2);
-            $(answersElem).append(newH3);
-            triviaGame.skipped++;
-            setTimeout(triviaGame.displayQuestion, 5000);
-           }   
+            var embedElem = $("<div id=\"embed\" class=\"embed-responsive embed-responsive-16by9 rounded\">");
+            var videoElem = $("<video class=\"embed-responsive-item\" autoplay controls>");
+            var sourceElem = $("<source type=\"video/mp4\">");
+            if (triviaGame.shuffledAnswers[triviaGame.counter - 1] === $(this).attr("data-answer")) {
+                triviaGame.stopTimer();
+                $(answersElem).empty();
+                $(newH2).addClass("green");
+                $(newH2).text("You couldn't BE any more correct!");
+                $(answersElem).append(newH2);
+                if (triviaGame.shuffledVideos[triviaGame.counter - 1] !== "") {
+                    $(sourceElem).attr("src", triviaGame.shuffledVideos[triviaGame.counter - 1]);
+                } else {
+                    triviaGame.shuffle(triviaGame.correctAnswerVid);
+                    $(sourceElem).attr("src", triviaGame.correctAnswerVid[0]);
+                }
+                $(videoElem).append(sourceElem);
+                $(embedElem).append(videoElem);
+                $(answersElem).append(embedElem);
+                triviaGame.right++;
+                triviaGame.lightningRoundFuncCheck();
+            } else if (clickCheck) {
+                triviaGame.stopTimer();
+                $(answersElem).empty();
+                $(newH2).text("Oops, it looks like you needed to PIVOT your answer!");
+                $(newH3).addClass("friends red mb-3");
+                $(newH3).text("The correct answer was: " + triviaGame.shuffledAnswers[triviaGame.counter - 1]);
+                triviaGame.shuffle(triviaGame.wrongAnswerVid);
+                $(sourceElem).attr("src", triviaGame.wrongAnswerVid[0]);
+                $(videoElem).append(sourceElem);
+                $(embedElem).append(videoElem);
+                $(answersElem).append(newH2);
+                $(answersElem).append(newH3);
+                $(answersElem).append(embedElem);
+                triviaGame.wrong++;
+                triviaGame.lightningRoundFuncCheck();
+            } else {
+                $("#time").text("Time's up!");
+                triviaGame.stopTimer();
+                $(answersElem).empty();
+                $(newH2).text("I realize it's probably a moo point now, but:");
+                $(newH3).addClass("friends red mb-3");
+                $(newH3).text("The correct answer was: " + triviaGame.shuffledAnswers[triviaGame.counter - 1]);
+                triviaGame.shuffle(triviaGame.skippedQuestionVid);
+                $(sourceElem).attr("src", triviaGame.skippedQuestionVid[0]);
+                $(videoElem).append(sourceElem);
+                $(embedElem).append(videoElem);
+                $(answersElem).append(newH2);
+                $(answersElem).append(newH3);
+                $(answersElem).append(embedElem);
+                triviaGame.skipped++;
+                triviaGame.lightningRoundFuncCheck();
+            }
         }
     }
 
