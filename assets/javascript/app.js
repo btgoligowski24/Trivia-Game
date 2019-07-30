@@ -326,7 +326,7 @@ $(document).ready(function () {
                     $(embedElem).css("max-width", "80%");
                 }
                 $(newH2).text("The Lightning Round");
-                $(newH2).attr("class": "lightningRound friends rounded mx-auto mb-3 py-2");
+                $(newH2).attr("class", "lightningRound friends rounded mx-auto mb-3 py-2");
                 $(answersElem).empty();
                 $(sourceElem).attr("src", triviaGame.lightningRoundVid);
                 $(videoElem).append(sourceElem);
