@@ -113,6 +113,7 @@ $(document).ready(function () {
         wrongAnswerVid: ["assets/videos/moreWrong.mp4", "assets/videos/youIdiot.mp4", "assets/videos/pivot.mp4", "assets/videos/dontBlameQuestions.mp4"],
         skippedQuestionVid: ["assets/videos/dontKnowAnything.mp4", "assets/videos/fellAsleep.mp4"],
         lightningRoundVid: "assets/videos/lightningRound.mp4",
+        gameOverVid: "assets/videos/weAreOver.mp4",
         get questionCount() {
             delete this.questionCount;
             return this.questionCount = Object.keys(this.questions).length;
@@ -244,14 +245,25 @@ $(document).ready(function () {
         },
         displayQuestion: function () {
             var clickCheck = triviaGame.clicked;
+            var statsElem = $("#stats");
+            var embedElem = $("<div id=\"embed\" class=\"embed-responsive embed-responsive-16by9 rounded\">");
+            var videoElem = $("<video class=\"embed-responsive-item\" autoplay controls>");
+            var sourceElem = $("<source type=\"video/mp4\">");
             if (triviaGame.counter === triviaGame.questionCount) {
                 $("#right").text(triviaGame.right + "/" + triviaGame.questionCount);
                 $("#wrong").text(triviaGame.wrong + "/" + triviaGame.questionCount);
                 $("#skipped").text(triviaGame.skipped + "/" + triviaGame.questionCount);
-                $("#stats").css("display", "block");
+                $(statsElem).css("display", "block");
                 $("#game").css("display", "none");
                 $("#start").css("display", "inline-block");
                 $("#start").text("Play Again");
+                if ($(embedElem).css("max-width") === "50%") {
+                    $(embedElem).css("max-width", "80%");
+                }
+                $(sourceElem).attr("src", triviaGame.gameOverVid);
+                $(videoElem).append(sourceElem);
+                $(embedElem).append(videoElem);
+                $(statsElem).prepend(embedElem);
                 triviaGame.right = 0;
                 triviaGame.wrong = 0;
                 triviaGame.skipped = 0;
@@ -262,10 +274,15 @@ $(document).ready(function () {
                 if ($("#start").css("display") === "inline-block" && triviaGame.counter === 0) {
                     triviaGame.shuffle(triviaGame.shuffledQuestions, triviaGame.shuffledAnswers, triviaGame.shuffledChoices, triviaGame.shuffledVideos);
                     $("#start").css("display", "none");
-                    $("#stats").css("display", "none");
+                    $(statsElem).css("display", "none");
                     $("#game").css("display", "block");
                 }
-
+                if ($("#questions").css("display") === "none") {
+                    $("#questions").css("display", "block");
+                }
+                if ($("#embed").css("max-width") === "80%") {
+                    $("#embed").css("max-width", "50%");
+                }
                 triviaGame.newQuestion();
             }
         },
@@ -305,14 +322,18 @@ $(document).ready(function () {
                 var videoElem = $("<video class=\"embed-responsive-item\" autoplay controls>");
                 var sourceElem = $("<source type=\"video/mp4\">");
                 var newH2 = $("<h2 class=\"mb-3\">");
+                if ($(embedElem).css("max-width") === "50%") {
+                    $(embedElem).css("max-width", "80%");
+                }
                 $(newH2).text("The Lightning Round");
-                $(newH2).attr("class", "lightningRound friends rounded mx-auto mb-3 py-2");
+                $(newH2).attr("class": "lightningRound friends rounded mx-auto mb-3 py-2");
                 $(answersElem).empty();
                 $(sourceElem).attr("src", triviaGame.lightningRoundVid);
                 $(videoElem).append(sourceElem);
                 $(embedElem).append(videoElem);
                 $(answersElem).append(embedElem);
                 $("#questions").prepend(newH2);
+                $("#questions").css("display", "none");
             }
         },
         showAnswer: function (clickCheck) {
