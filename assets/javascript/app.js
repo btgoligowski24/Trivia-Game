@@ -153,9 +153,7 @@ $(document).ready(function () {
                 } else {
                     $("#time").text(triviaGame.timeLimit + " second");
                 }
-                if (triviaGame.timeLimit >= 6 && $("#time").hasClass("hurry")) {
-                    $("#time").removeClass("hurry");
-                } else if (triviaGame.timeLimit === 5 && !$("#time").hasClass("hurry")) {
+                if (triviaGame.timeLimit === 5 && !$("#time").hasClass("hurry")) {
                     $("#time").addClass("hurry");
                 }
                 triviaGame.timeLimit--;
@@ -165,6 +163,9 @@ $(document).ready(function () {
             if (!triviaGame.timerRunning) {
                 if ($("#time").hasClass("timeUp")) {
                     $("#time").removeClass("timeUp");
+                }
+                if ($("#time").hasClass("hurry")) {
+                    $("#time").removeClass("hurry");
                 }
                 if (triviaGame.lightningRound) {
                     triviaGame.timeLimit = 6;
