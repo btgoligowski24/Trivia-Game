@@ -109,9 +109,9 @@ $(document).ready(function () {
             24: "",
             25: ""
         },
-        correctAnswerVid: ["assets/videos/thatIsCorrect.mp4", "assets/videos/iKnewIt.mp4"],
-        wrongAnswerVid: ["assets/videos/moreWrong.mp4", "assets/videos/youIdiot.mp4", "assets/videos/pivot.mp4"],
-        skippedQuestionVid: ["assets/videos/dontBlameQuestions.mp4", "assets/videos/fellAsleep.mp4"],
+        correctAnswerVid: ["assets/videos/thatIsCorrect.mp4", "assets/videos/iKnewIt.mp4", "assets/videos/excited.mp4"],
+        wrongAnswerVid: ["assets/videos/moreWrong.mp4", "assets/videos/youIdiot.mp4", "assets/videos/pivot.mp4", "assets/videos/dontBlameQuestions.mp4"],
+        skippedQuestionVid: ["assets/videos/dontKnowAnything.mp4", "assets/videos/fellAsleep.mp4"],
         lightningRoundVid: "assets/videos/lightningRound.mp4",
         get questionCount() {
             delete this.questionCount;
