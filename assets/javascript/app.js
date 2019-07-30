@@ -258,9 +258,6 @@ $(document).ready(function () {
                 $("#game").css("display", "none");
                 $("#start").css("display", "inline-block");
                 $("#start").text("Play Again");
-                if ($(embedElem).css("max-width") === "50%") {
-                    $(embedElem).css("max-width", "80%");
-                }
                 $(sourceElem).attr("src", triviaGame.gameOverVid);
                 $(videoElem).append(sourceElem);
                 $(embedElem).append(videoElem);
@@ -294,6 +291,7 @@ $(document).ready(function () {
                 var newSelection = $("<h2>");
                 $(newSelection).addClass("choice rounded py-1");
                 $(newSelection).attr("data-answer", value);
+                $(newSelection).css("cursor", "pointer");
                 $(newSelection).text(value);
                 $(newSelection).on("click", {
                     clickCheck: true
@@ -392,7 +390,7 @@ $(document).ready(function () {
         },
         increaseEmbedElemWidth: function () {
             if ($("#embed").css("max-width") === "50%") {
-                $("#embed").css("max-width", "80%");
+                $("#embed").css("max-width", "90%");
             }
         },
     }
