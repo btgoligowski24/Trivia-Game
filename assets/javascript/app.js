@@ -40,7 +40,7 @@ $(document).ready(function () {
             question: "What is Chandler's middle name?",
             answer: "Muriel",
             choices: ["Marcel", "Michelle", "Millicent", "Muriel"],
-            video: ""
+            video: "assets/videos/muriel.mp4"
         }, {
             question: "What did Joey name his barcalounger?",
             answer: "Rosita",
